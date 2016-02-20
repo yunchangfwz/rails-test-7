@@ -12,18 +12,26 @@ describe Person do
   context 'associations' do
     it { is_expected.to have_one :fathership }
     it { is_expected.to have_one :mothership }
+    it { is_expected.to have_one :husbandship }
+    it { is_expected.to have_one :wifeship }
 
     it { is_expected.to have_one :father }
     it { is_expected.to have_one :mother }
+    it { is_expected.to have_one :husband }
+    it { is_expected.to have_one :wife }
 
     it { is_expected.to have_many :parentships }
     it { is_expected.to have_many :childrenships }
+    it { is_expected.to have_many :friendships }
+    it { is_expected.to have_many :friends_of_friendships }
+    it { is_expected.to have_many :friends_of_friends }
 
     it { is_expected.to have_many :parents }
     it { is_expected.to have_many :children }
     it { is_expected.to have_many :sons }
     it { is_expected.to have_many :daughters }
     it { is_expected.to have_many :brothers }
+    it { is_expected.to have_many :friends }
   end
 
   describe 'relationships' do
@@ -128,6 +136,79 @@ describe Person do
           person.dob = dob
           expect(person).to_not be_valid
         end
+      end
+    end
+  end
+
+  describe '#husband , #wife' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:lily)  { create(:female,   first_name: 'Lily') }
+    let!(:wifeship)     { create(:wifeship,   person: john,  member: lily) }
+    let!(:husbandship)  { create(:husbandship,   person: lily,  member: john) }
+
+    it "john'wife is lily" do
+      expect(john.wife).to eq(lily.becomes(Wife))
+    end
+
+    it "lily'husband is lily" do
+      expect(lily.husband).to eq(john.becomes(Husband))
+    end
+  end
+
+  describe '#friends , #friends_of_friends, #mutual_friends' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:jack)  { create(:male,     first_name: 'Jack') }
+    let!(:jason)  { create(:male,    first_name: 'Jason') }
+    let!(:mason)  { create(:male,    first_name: 'Mason') }
+
+    let!(:mia) { create(:female,   first_name: 'Mia') }
+
+    before do
+      create(:friendship, person: john, member: jack)
+      create(:friendship, person: john, member: jason)
+
+      create(:friendship, person: jack, member: mia)
+      create(:friendship, person: jack, member: mason)
+      create(:friendship, person: jack, member: jason)
+      create(:friendship, person: jack, member: john)
+    end
+
+    it "john.friends => [jack, jason]" do
+      expect(john.friends).to include jack.becomes(Friend) and jason.becomes(Friend)
+    end
+
+    it "john.friends not include mia" do
+      expect(john.friends).not_to include mia.becomes(Friend)
+    end
+
+    it "john.friends_of_friends => [mason, john, mia]" do
+      expect(john.friends_of_friends).to include mason.becomes(Friend) and mia.becomes(Friend)
+    end
+
+    it "john.friends_of_friends not include john" do
+      expect(john.friends_of_friends).not_to include john.becomes(Friend)
+    end
+
+  end
+
+  describe '#mother_in_law' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:lily)  { create(:female,   first_name: 'Lily') }
+    let!(:mina)  { create(:female,   first_name: 'Mina') }
+    let!(:sofia) { create(:female,   first_name: 'Sofia') }
+    let!(:fathership) { create(:fathership, person: sofia, member: john) }
+    let!(:wifeship)   { create(:wifeship,   person: john,  member: lily) }
+
+    context "sofia's mother is nil" do
+      it "returns nil" do
+        expect(sofia.mother_in_law).to be nil
+      end
+    end
+
+    context "sofia's mother is mina" do
+      let!(:mothership)   { create(:mothership, person: sofia, member: mina) }
+      it "returns lily" do
+        expect(sofia.mother_in_law).to eq(lily.becomes(Wife))
       end
     end
   end
