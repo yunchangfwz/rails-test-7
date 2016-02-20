@@ -12,18 +12,26 @@ describe Person do
   context 'associations' do
     it { is_expected.to have_one :fathership }
     it { is_expected.to have_one :mothership }
+    it { is_expected.to have_one :husbandship }
+    it { is_expected.to have_one :wifeship }
 
     it { is_expected.to have_one :father }
     it { is_expected.to have_one :mother }
+    it { is_expected.to have_one :husband }
+    it { is_expected.to have_one :wife }
 
     it { is_expected.to have_many :parentships }
     it { is_expected.to have_many :childrenships }
+    it { is_expected.to have_many :friendships }
+    it { is_expected.to have_many :friends_of_friendships }
+    it { is_expected.to have_many :friends_of_friends }
 
     it { is_expected.to have_many :parents }
     it { is_expected.to have_many :children }
     it { is_expected.to have_many :sons }
     it { is_expected.to have_many :daughters }
     it { is_expected.to have_many :brothers }
+    it { is_expected.to have_many :friends }
   end
 
   describe 'relationships' do

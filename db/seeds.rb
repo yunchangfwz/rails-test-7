@@ -23,4 +23,10 @@ end
 Husbandship.create(person: lily, member: john)
 Wifeship.create(person: john, member: lily)
 
+Friendship.create(person: john, member: jack)
+Friendship.create(person: john, member: jason)
 
+Friendship.create(person: jack, member: mia)
+Friendship.create(person: jack, member: mason)
+Friendship.create(person: jack, member: jason)
+Friendship.create(person: jack, member: john)
