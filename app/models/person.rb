@@ -25,7 +25,8 @@ class Person < ActiveRecord::Base
   has_many  :friendships, dependent: :destroy
   has_many  :friends,   class_name: Friend,   through: :friendships,  source: :member
   has_many  :friends_of_friendships, -> (object) { where.not(member_id: object.id).uniq }, class_name: Friendship, through: :friends, source: :friendships
-  has_many  :friends_of_friends,   class_name: Friend,   through: :friends_of_friendships, source: :member
+  has_many  :friends_of_friends,  -> (object) { where.not(id: object.friends.ids) }, class_name: Friend,   through: :friends_of_friendships, source: :member
+  has_many  :mutual_friends, -> (object) { where(id: object.friends.ids) },  class_name: Friend,   through: :friends_of_friendships, source: :member
 
   validates :first_name, presence: true
   validates :last_name,  presence: true
@@ -52,10 +53,6 @@ class Person < ActiveRecord::Base
 
   def say_something
     "Hello, my full name is #{name}."
-  end
-
-  def mutual_friends(person)
-    friends & person.friends
   end
 
   def mother_in_law

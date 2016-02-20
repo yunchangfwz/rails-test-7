@@ -23,13 +23,13 @@ end
 Husbandship.create(person: lily, member: john)
 Wifeship.create(person: john, member: lily)
 
-Friendship.create(person: john, member: jack)
-Friendship.create(person: john, member: jason)
+[jack, jason].each do |person|
+  Friendship.create(person: john, member: person)
+end
 
-Friendship.create(person: jack, member: mia)
-Friendship.create(person: jack, member: mason)
-Friendship.create(person: jack, member: jason)
-Friendship.create(person: jack, member: john)
+[mia, mason, jason, john].each do |person|
+  Friendship.create(person: jack, member: person)
+end
 
 Fathership.create(person: sofia, member: john)
 Mothership.create(person: sofia, member: mina)

@@ -155,21 +155,6 @@ describe Person do
     end
   end
 
-  describe '#friends , #friends_of_friends' do
-    let!(:john)  { create(:male,     first_name: 'John') }
-    let!(:lily)  { create(:female,   first_name: 'Lily') }
-    let!(:wifeship)     { create(:wifeship,   person: john,  member: lily) }
-    let!(:husbandship)  { create(:husbandship,   person: lily,  member: john) }
-
-    it "john'wife is lily" do
-      expect(john.wife).to eq(lily.becomes(Wife))
-    end
-
-    it "lily'husband is lily" do
-      expect(lily.husband).to eq(john.becomes(Husband))
-    end
-  end
-
   describe '#mother_in_law' do
     let!(:john)  { create(:male,     first_name: 'John') }
     let!(:lily)  { create(:female,   first_name: 'Lily') }
