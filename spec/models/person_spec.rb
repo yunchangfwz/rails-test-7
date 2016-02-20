@@ -139,4 +139,56 @@ describe Person do
       end
     end
   end
+
+  describe '#husband , #wife' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:lily)  { create(:female,   first_name: 'Lily') }
+    let!(:wifeship)     { create(:wifeship,   person: john,  member: lily) }
+    let!(:husbandship)  { create(:husbandship,   person: lily,  member: john) }
+
+    it "john'wife is lily" do
+      expect(john.wife).to eq(lily.becomes(Wife))
+    end
+
+    it "lily'husband is lily" do
+      expect(lily.husband).to eq(john.becomes(Husband))
+    end
+  end
+
+  describe '#friends , #friends_of_friends' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:lily)  { create(:female,   first_name: 'Lily') }
+    let!(:wifeship)     { create(:wifeship,   person: john,  member: lily) }
+    let!(:husbandship)  { create(:husbandship,   person: lily,  member: john) }
+
+    it "john'wife is lily" do
+      expect(john.wife).to eq(lily.becomes(Wife))
+    end
+
+    it "lily'husband is lily" do
+      expect(lily.husband).to eq(john.becomes(Husband))
+    end
+  end
+
+  describe '#mother_in_law' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:lily)  { create(:female,   first_name: 'Lily') }
+    let!(:mina)  { create(:female,   first_name: 'Mina') }
+    let!(:sofia) { create(:female,   first_name: 'Sofia') }
+    let!(:fathership) { create(:fathership, person: sofia, member: john) }
+    let!(:wifeship)   { create(:wifeship,   person: john,  member: lily) }
+
+    context "sofia's mother is nil" do
+      it "returns nil" do
+        expect(sofia.mother_in_law).to be nil
+      end
+    end
+
+    context "sofia's mother is mina" do
+      let!(:mothership)   { create(:mothership, person: sofia, member: mina) }
+      it "returns lily" do
+        expect(sofia.mother_in_law).to eq(lily.becomes(Wife))
+      end
+    end
+  end
 end

@@ -55,7 +55,13 @@ class Person < ActiveRecord::Base
   end
 
   def mutual_friends(person)
-    self.friends & person.friends
+    friends & person.friends
+  end
+
+  def mother_in_law
+    return nil if mother.nil? or father.nil?
+    return nil if mother.nil? and father
+    father.wife
   end
 
   private

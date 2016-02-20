@@ -30,3 +30,6 @@ Friendship.create(person: jack, member: mia)
 Friendship.create(person: jack, member: mason)
 Friendship.create(person: jack, member: jason)
 Friendship.create(person: jack, member: john)
+
+Fathership.create(person: sofia, member: john)
+Mothership.create(person: sofia, member: mina)
