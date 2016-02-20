@@ -155,6 +155,42 @@ describe Person do
     end
   end
 
+  describe '#friends , #friends_of_friends, #mutual_friends' do
+    let!(:john)  { create(:male,     first_name: 'John') }
+    let!(:jack)  { create(:male,     first_name: 'Jack') }
+    let!(:jason)  { create(:male,    first_name: 'Jason') }
+    let!(:mason)  { create(:male,    first_name: 'Mason') }
+
+    let!(:mia) { create(:female,   first_name: 'Mia') }
+
+    before do
+      create(:friendship, person: john, member: jack)
+      create(:friendship, person: john, member: jason)
+
+      create(:friendship, person: jack, member: mia)
+      create(:friendship, person: jack, member: mason)
+      create(:friendship, person: jack, member: jason)
+      create(:friendship, person: jack, member: john)
+    end
+
+    it "john.friends => [jack, jason]" do
+      expect(john.friends).to include jack.becomes(Friend) and jason.becomes(Friend)
+    end
+
+    it "john.friends not include mia" do
+      expect(john.friends).not_to include mia.becomes(Friend)
+    end
+
+    it "john.friends_of_friends => [mason, john, mia]" do
+      expect(john.friends_of_friends).to include mason.becomes(Friend) and mia.becomes(Friend)
+    end
+
+    it "john.friends_of_friends not include john" do
+      expect(john.friends_of_friends).not_to include john.becomes(Friend)
+    end
+
+  end
+
   describe '#mother_in_law' do
     let!(:john)  { create(:male,     first_name: 'John') }
     let!(:lily)  { create(:female,   first_name: 'Lily') }

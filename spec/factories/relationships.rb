@@ -12,5 +12,5 @@ FactoryGirl.define do
 
   factory :wifeship,  parent: :relationship, class: Wifeship
 
-  factory :friendships,  parent: :relationship, class: Friendship
+  factory :friendship,  parent: :relationship, class: Friendship
 end
